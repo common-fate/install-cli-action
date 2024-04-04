@@ -24,17 +24,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set GitHub Path
-      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
-      shell: bash
-      env:
-        GITHUB_ACTION_PATH: ${{ github.action_path }}
-
     - name: Download 'cf' CLI
       shell: bash
       env:
         CLI_VERSION: ${{ inputs.version }}
       run: |
+        cd ${{ github.action_path }}
+
         # import the Common Fate signing key
         gpg --import common-fate-signing-key.asc
 
