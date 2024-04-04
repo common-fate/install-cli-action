@@ -1,5 +1,8 @@
 name: "Setup Common Fate CLI"
 description: "GitHub Action to install and configure the Common Fate CLI"
+branding:
+  icon: arrow-down-circle
+  color: gray-dark
 inputs:
   version:
     description: "The CLI version to install"
