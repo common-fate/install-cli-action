@@ -40,7 +40,9 @@ runs:
         curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/checksums.txt
         curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/checksums.txt.sig
         shasum -a 256 -c checksums.txt --ignore-missing
-        gpg --verify ./checksums.txt.sig
+
+        # use --trust-model always to mark the key we imported above as trusted for this invocation.
+        gpg --trust-model always --verify ./checksums.txt.sig
 
         sudo tar -zxvf ./cf_${CLI_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin/
 
