@@ -21,7 +21,7 @@ runs:
         CLI_VERSION: ${{ inputs.version }}
       run: |
         # import the Common Fate signing key
-        gpg --import ./.github/common-fate-signing-key.asc
+        gpg --import common-fate-signing-key.asc
 
         curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/cf_${CLI_VERSION}_linux_x86_64.tar.gz
 
