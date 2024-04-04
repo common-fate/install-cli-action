@@ -1,0 +1,34 @@
+name: "Setup Common Fate CLI"
+description: "GitHub Action to install and configure the Common Fate CLI"
+inputs:
+  version:
+    description: "The CLI version to install"
+    required: true
+    default: "1.11.0"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+
+    - name: Download 'cf' CLI
+      shell: bash
+      env:
+        CLI_VERSION: ${{ inputs.version }}
+      run: |
+        # import the Common Fate signing key
+        gpg --import ./.github/common-fate-signing-key.asc
+
+        curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/cf_${CLI_VERSION}_linux_x86_64.tar.gz
+
+        # verify the CLI signature (see: https://docs.commonfate.io/granted/security)
+        curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/checksums.txt
+        curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/checksums.txt.sig
+        shasum -a 256 -c checksums.txt --ignore-missing
+        gpg --verify ./checksums.txt.sig
+
+        sudo tar -zxvf ./cf_${CLI_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin/
