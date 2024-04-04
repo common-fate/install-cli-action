@@ -31,8 +31,17 @@ runs:
       run: |
         cd ${{ github.action_path }}
 
+        KEY_FPATH=common-fate-signing-key.asc
+
         # import the Common Fate signing key
-        gpg --import common-fate-signing-key.asc
+        gpg --import $KEY_FPATH
+
+        # extract the public key ID
+        KEY_ID=$(gpg --list-packets <"$KEY_FPATH" | awk '$1=="keyid:"{print$2;exit}')
+
+        # mark the key as trusted
+        (echo 5; echo y; echo save) |
+        gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$KEY_ID" trust
 
         curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/cf_${CLI_VERSION}_linux_x86_64.tar.gz
 
@@ -41,8 +50,7 @@ runs:
         curl -OL releases.commonfate.io/cf/v${CLI_VERSION}/checksums.txt.sig
         shasum -a 256 -c checksums.txt --ignore-missing
 
-        # use --trust-model always to mark the key we imported above as trusted for this invocation.
-        gpg --trust-model always --verify ./checksums.txt.sig
+        gpg --verify ./checksums.txt.sig
 
         sudo tar -zxvf ./cf_${CLI_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin/
 
