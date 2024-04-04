@@ -5,6 +5,18 @@ inputs:
     description: "The CLI version to install"
     required: true
     default: "1.11.0"
+  oidc-client-id:
+    description: "The OIDC client ID to authenticate with"
+    required: true
+  oidc-client-secret:
+    description: "The OIDC client secret to authenticate with"
+    required: true
+  oidc-issuer:
+    description: "The OIDC issuer to authenticate with"
+    required: true
+  api-url:
+    description: "The Common Fate API URL"
+    required: true
 
 runs:
   using: "composite"
@@ -32,3 +44,11 @@ runs:
         gpg --verify ./checksums.txt.sig
 
         sudo tar -zxvf ./cf_${CLI_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin/
+
+    - name: Export environment variables to configure the CLI
+      shell: bash
+      run: |
+        echo "CF_OIDC_CLIENT_ID=${{ inputs.oidc-client-id }}" >> $GITHUB_ENV
+        echo "CF_OIDC_CLIENT_SECRET=${{ inputs.oidc-client-secret }}" >> $GITHUB_ENV
+        echo "CF_OIDC_ISSUER=${{ inputs.oidc-issuer }}" >> $GITHUB_ENV
+        echo "CF_API_URL=${{ inputs.api-url }}" >> $GITHUB_ENV
