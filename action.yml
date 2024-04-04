@@ -55,6 +55,7 @@ runs:
         sudo tar -zxvf ./cf_${CLI_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin/
 
         # set up the config file to prevent errors during CLI initialisation
+        mkdir -p ~/.cf
         touch ~/.cf/config
 
     - name: Export environment variables to configure the CLI
