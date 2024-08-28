@@ -7,7 +7,7 @@ inputs:
   version:
     description: "The CLI version to install"
     required: true
-    default: "1.12.0"
+    default: "1.15.0"
   oidc-client-id:
     description: "The OIDC client ID to authenticate with"
     required: true
@@ -61,4 +61,5 @@ runs:
         echo "CF_OIDC_CLIENT_SECRET=${{ inputs.oidc-client-secret }}" >> $GITHUB_ENV
         echo "CF_OIDC_ISSUER=${{ inputs.oidc-issuer }}" >> $GITHUB_ENV
         echo "CF_API_URL=${{ inputs.api-url }}" >> $GITHUB_ENV
+        echo "CF_ACCESS_URL=${{ inputs.api-url }}" >> $GITHUB_ENV
         echo "CF_CONFIG_SOURCES=env" >> $GITHUB_ENV
