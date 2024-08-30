@@ -7,7 +7,7 @@ inputs:
   version:
     description: "The CLI version to install"
     required: true
-    default: "1.15.1"
+    default: "1.16.0"
   oidc-client-id:
     description: "The OIDC client ID to authenticate with"
     required: true
